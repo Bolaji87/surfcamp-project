@@ -1,10 +1,21 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { HeroSection } from "@/components/blocks/HeroSection";
+import { getHomePage } from "@/data/loaders";
+import { notFound } from "next/navigation";
 
-export default function Home() {
+async function loader() {
+  const data = await getHomePage();
+  if (!data) notFound();
+  console.log(data.data);
+  return { ...data.data };
+}
+export default async function Home() {
+  const data = await loader();
+  const blocks = data?.blocks || [];
+
+  console.log(data);
   return (
     <div>
-      <h1>Hello</h1>
+      <HeroSection {...blocks[0]} />
     </div>
   );
 }
